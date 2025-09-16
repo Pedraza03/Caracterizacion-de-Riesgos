@@ -164,7 +164,7 @@ export default function AnalisisRiesgo({ user }) {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Columna izquierda */}
           <div className="space-y-6">
-            <InfoActivo activo={activoSeleccionado} />
+            <InfoActivo activo={activoSeleccionado} amenazas={amenazas} />
 
             <AmenazasIdentificadas
               amenazas={amenazas}

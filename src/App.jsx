@@ -5,6 +5,7 @@ import Home from './components/dashboard/Home.jsx';
 import Activos from './components/Activos/Activos.jsx';
 import Amenazas from './components/Amenazas/Amenazas.jsx';
 import AnalisisRiesgo from './components/Analisis de Riesgo/AnalisisRiesgo.jsx';
+import ControlRiesgo from './components/Control/ControlRiesgo.jsx';
 
 function App() {
   const [activeArea, setActiveArea] = useState('Home');
@@ -47,10 +48,13 @@ function App() {
         setUser={setUser}    // <-- pasa setUser global
       />
       <main className="flex-1 p-6 overflow-y-auto">
-        {activeArea === 'Home' && <Home />}
         {activeArea === 'Activos' && <Activos user={user} reloadActivos={reloadActivos} />}
         {activeArea === 'Amenazas' && <Amenazas user={user} activos={activos} reloadActivos={reloadActivos} />}
         {activeArea === 'Analisis Riesgo' && <AnalisisRiesgo user={user} activos={activos} />}
+        {activeArea === 'Controles' && <ControlRiesgo user={user} activos={activos} />}
+        {activeArea === 'Home' && <Home user={user} />}
+
+
       </main>
     </div>
   );

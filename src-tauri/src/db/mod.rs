@@ -1,6 +1,7 @@
 pub mod users;
 pub mod activos;
 pub mod threats;
+pub mod controls;
 
 use rusqlite::{Connection, Result};
 use std::sync::Mutex;
@@ -53,13 +54,30 @@ impl Db {
         connection.execute(
             "CREATE TABLE IF NOT EXISTS controls (
                 id INTEGER PRIMARY KEY,
-                threat_id INTEGER NOT NULL,
+                name TEXT NOT NULL,
                 description TEXT NOT NULL,
-                mitigation TEXT NOT NULL,
-                FOREIGN KEY(threat_id) REFERENCES threats(id)
+                type TEXT NOT NULL,
+                threat_type TEXT NOT NULL  -- Relación genérica: Técnica, Humana, Natural, etc.
             )",
             [],
         )?;
+
+        // Relación N:M entre amenazas y controles
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS controls_applied (
+                id INTEGER PRIMARY KEY,
+                control_id INTEGER NOT NULL,
+                threat_id INTEGER NOT NULL,
+                asset_id INTEGER NOT NULL,
+                status TEXT NOT NULL DEFAULT 'Pendiente',
+                FOREIGN KEY(control_id) REFERENCES controls(id),
+                FOREIGN KEY(threat_id) REFERENCES threats(id),
+                FOREIGN KEY(asset_id) REFERENCES activos(id)
+            )",
+            [],
+        )?;
+
+
         
         // ======================
         // Cargar catálogo inicial
@@ -87,6 +105,28 @@ impl Db {
                 "
             )?;
         }
+
+        let control_count: i32 = connection.query_row(
+            "SELECT COUNT(*) FROM controls",
+            [],
+            |row| row.get(0),
+        )?;
+
+        if control_count == 0 {
+            connection.execute_batch(
+                "
+                INSERT INTO controls (name, description, type, threat_type) VALUES
+                ('Antivirus y Antimalware', 'Uso de software de protección actualizado.', 'Técnica', 'Técnica'),
+                ('Cortafuegos', 'Restricción de accesos no autorizados.', 'Técnica', 'Técnica'),
+                ('Formación en Phishing', 'Capacitación al personal contra engaños.', 'Organizativa', 'Humana'),
+                ('Backups regulares', 'Copias de seguridad periódicas y verificadas.', 'Recuperación', 'Técnica'),
+                ('Redundancia eléctrica', 'Sistemas de respaldo eléctrico (UPS).', 'Física', 'Natural'),
+                ('Plan de evacuación', 'Procedimientos ante incendios o desastres.', 'Organizativa', 'Natural'),
+                ('Control de acceso físico', 'Protección de salas y equipos.', 'Física', 'Humana');
+                "
+            )?;
+        }
+
 
         Ok(Db { connection: Mutex::new(connection) })
     }

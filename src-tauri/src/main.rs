@@ -12,6 +12,13 @@ use commands::{
     obtener_amenazas_por_activo,
     editar_amenaza,
     eliminar_amenaza,
+    aplicar_control,
+    obtener_controles_por_tipo,
+    obtener_controles_aplicados,
+    actualizar_estado_control,
+    eliminar_control_aplicado,
+    obtener_resumen_dashboard,
+
 };
 
 fn main() {
@@ -29,7 +36,14 @@ fn main() {
             crear_amenaza,
             obtener_amenazas_por_activo,
             editar_amenaza,
-            eliminar_amenaza
+            eliminar_amenaza,
+            aplicar_control,
+            obtener_controles_por_tipo,
+            obtener_controles_aplicados,
+            actualizar_estado_control,
+            eliminar_control_aplicado,
+            obtener_resumen_dashboard,
+
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

@@ -34,10 +34,6 @@ const menuItems = [
     label: 'Analisis Riesgo'
   },
   {
-    icons: <IoLogoBuffer size={30} />,
-    label: 'Tratamiento'
-  },
-  {
     icons: <TbReportSearch size={30} />,
     label: 'Controles'
   }

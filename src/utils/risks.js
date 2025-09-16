@@ -26,7 +26,7 @@ export const getRiskColor = (level = "") => {
   }
 };
 
-// Riesgo cualitativo
+// Riesgo cualitativo (criticidad * severidad)
 export const calcularRiesgoCualitativo = (
   criticidadActivo = "Bajo",
   severidadAmenaza = "Bajo"
@@ -41,7 +41,7 @@ export const calcularRiesgoCualitativo = (
   return "Crítico";
 };
 
-// Riesgo cuantitativo
+// Riesgo cuantitativo (impacto * probabilidad)
 export const calcularRiesgoCuantitativo = (impacto, probabilidad) => {
   const riesgo = impacto * probabilidad;
   let nivel = "";
@@ -53,6 +53,7 @@ export const calcularRiesgoCuantitativo = (impacto, probabilidad) => {
 
   return { riesgo, nivel };
 };
+
 
 // Matriz 4x4 con colores
 export const generarMatrizRiesgo = () => {
@@ -67,4 +68,46 @@ export const generarMatrizRiesgo = () => {
     matriz.push(fila);
   }
   return matriz;
+};
+
+// Pesos para la ponderación
+const AMENAZA_PESOS = {
+  "Crítico": 1.0,
+  "Critico": 1.0, // por si viene sin tilde
+  "Alto": 0.75,
+  "Medio": 0.5,
+  "Bajo": 0.25
+};
+
+// Calcular vulnerabilidad de un activo (ponderación por amenazas)
+export const calcularVulnerabilidadActivo = (amenazas = []) => {
+  if (!Array.isArray(amenazas) || amenazas.length === 0) return 0;
+
+  const sumarPesos = (acc, a) => {
+    const fre = a?.frecuencia ?? "Bajo";
+    const sev = a?.severity ?? "Bajo";
+
+    // Paso 1: obtener nivel cualitativo según fre * sev
+    const nivel = calcularRiesgoCualitativo(fre, sev);
+
+    // Paso 2: obtener el peso de ese nivel
+    const peso = AMENAZA_PESOS[nivel] ?? 0.25;
+
+    console.log(
+      "Amenaza:",
+      a.nombre ?? "-",
+      "| Frecuencia:", fre,
+      "| Severidad:", sev,
+      "| Nivel calculado:", nivel,
+      "| Peso:", peso
+    );
+
+    return acc + peso;
+  };
+
+  const sumaPesos = amenazas.reduce(sumarPesos, 0);
+  const promedioPeso = sumaPesos / amenazas.length;
+  const porcentaje = promedioPeso * 100;
+
+  return Math.round(porcentaje);
 };

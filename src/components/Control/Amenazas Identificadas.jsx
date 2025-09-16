@@ -1,10 +1,9 @@
 // AmenazasIdentificadas.jsx
 import React from "react";
-import { getRiskColor } from "../../utils/risks";
+import { getRiskColor, calcularRiesgoCualitativo } from "../../utils/risks";
 
 export default function AmenazasIdentificadas({
   amenazas = [],
-  calcularRiesgoCualitativo,
   onSelectAmenaza, // <- función para enviar la amenaza seleccionada
   amenazaSeleccionadaId, // <- para marcar cuál está activa
 }) {

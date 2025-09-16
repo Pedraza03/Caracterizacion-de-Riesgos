@@ -2,28 +2,38 @@
 import React from 'react';
 import { AlertTriangle, Activity, Info } from 'lucide-react';
 
-export default function QuickActions() {
+export default function QuickActions({ data }) {
+  if (!data) {
+    return (
+      <div className="bg-zinc-800 border border-zinc-700 rounded-xl p-6">
+        <h3 className="text-white text-lg font-semibold mb-2">Acciones Rápidas</h3>
+        <p className="text-zinc-400 text-sm">Cargando datos...</p>
+      </div>
+    );
+  }
+
+
   const actions = [
     { 
       type: 'critical', 
-      count: 5, 
-      text: 'riesgos críticos', 
+      count: data.riesgos_critico ?? 0,
+      text: 'riesgos críticos',
       subtext: 'Requieren atención inmediata',
       icon: AlertTriangle,
       color: 'border-red-500/20 bg-red-500/10 text-red-400'
     },
     { 
       type: 'warning', 
-      count: 3, 
-      text: 'controles vencidos', 
-      subtext: 'Necesitan revisión',
+      count: data.controles_pendientes ?? 0, // <-- solo pendientes
+      text: 'controles Pendientes', 
+      subtext: 'Necesitan revisión periódica',
       icon: Activity,
       color: 'border-orange-500/20 bg-orange-500/10 text-orange-400'
     },
     { 
       type: 'info', 
-      count: 8, 
-      text: 'nuevos activos', 
+      count: data.activos_sin_controles ?? 0, // <-- usa el nuevo campo
+      text: 'activos sin controles',
       subtext: 'Pendientes de evaluación',
       icon: Info,
       color: 'border-blue-500/20 bg-blue-500/10 text-blue-400'

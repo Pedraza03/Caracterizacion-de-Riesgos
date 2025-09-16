@@ -45,7 +45,7 @@ export default function MatrizRiesgo({
   return (
     <div className="bg-[#1F2937] rounded-xl shadow-lg border border-zinc-700 p-6">
       <h3 className="text-white text-lg font-bold mb-4">
-        🎯 Matriz de Riesgo Cuantitativo (4x4)
+        🎯 Matriz de valoracion de Riesgo (4x4)
       </h3>
 
       <div className="mb-4">

@@ -178,10 +178,6 @@ const Activos = ({ user, reloadActivos }) => {
                     className="block w-full pl-9 pr-3 py-2 border border-zinc-600 rounded-md leading-5 bg-zinc-900 text-white placeholder-zinc-400 focus:outline-none focus:placeholder-zinc-500 focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                   />
                 </div>
-                <button className="inline-flex items-center px-3 py-2 border border-zinc-600 shadow-sm text-sm leading-4 font-medium rounded-md text-zinc-200 bg-zinc-700 hover:bg-zinc-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                  <Filter className="mr-2 h-4 w-4" />
-                  Filtros
-                </button>
               </div>
             </motion.div>
 
